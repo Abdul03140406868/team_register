@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Tournament Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B00;
+            --primary-dark: #E05D00;
+            --secondary: #00A79D;
+            --dark: #ffffff;
+            --light: #ffffff;
+            --gray: #6C757D;
+            --success: #28A745;
+            --danger: #DC3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .steps {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 10px 0;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+        
+        .step.active {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .step.completed {
+            color: var(--success);
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gray);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+        
+        .step:first-child::before {
+            width: 50%;
+            left: 50%;
+        }
+        
+        .step:last-child::before {
+            width: 50%;
+        }
+        
+        .step.active::before, .step.completed::before {
+            background: var(--primary);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            width: 30px;
+            height: 30px;
+            background: var(--gray);
+            color: rgb(255, 255, 255);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+        
+        .step.active .step-number {
+            background: var(--primary);
+            box-shadow: 0 0 0 5px rgba(255, 107, 0, 0.2);
+        }
+        
+        .step.completed .step-number {
+            background: var(--success);
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .form-group .required::after {
+            content: ' *';
+            color: var(--danger);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-color: #000000;
+            background-size: 16px;
+        }
+        
+        .team-members {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+        
+        .member-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .member-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(255, 107, 0, 0.1);
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .payment-method {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .payment-method input {
+            display: none;
+        }
+        
+        .payment-method label {
+            display: block;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method input:checked + label {
+            border-color: var(--primary);
+            background: rgba(255, 107, 0, 0.1);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        
+        .payment-method img {
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .payment-method .name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .jazzcash-payment {
+            background: rgba(0, 167, 157, 0.1);
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .jazzcash-payment.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .jazzcash-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .jazzcash-logo img {
+            height: 40px;
+        }
+        
+        .summary-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-item:last-child {
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid var(--success);
+            color: #b8f7c4;
+        }
+        
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid var(--danger);
+            color: #ffb8c1;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: rgb(255, 255, 255);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px auto;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .steps {
+                padding: 10px;
+            }
+            
+            .step {
+                font-size: 12px;
+            }
+            
+            .step-number {
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+            
+            .payment-method {
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FREE FIRE TOURNAMENT REGISTRATION</h1>
+            <p>Register your team and compete for amazing prizes!</p>
+        </div>
+        
+        <div class="steps">
+            <div class="step active" id="step1-indicator">
+                <div class="step-number">1</div>
+                <div>Team Info</div>
+            </div>
+            <div class="step" id="step2-indicator">
+                <div class="step-number">2</div>
+                <div>Team Members</div>
+            </div>
+            <div class="step" id="step3-indicator">
+                <div class="step-number">3</div>
+                <div>Payment</div>
+            </div>
+            <div class="step" id="step4-indicator">
+                <div class="step-number">4</div>
+                <div>Complete</div>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <!-- Step 1: Team Information -->
+            <div class="form-step active" id="step1">
+                <div class="form-group">
+                    <label class="required">Team Name</label>
+                    <input type="text" class="form-control" id="teamName" placeholder="Enter your team name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Team Leader Name</label>
+                    <input type="text" class="form-control" id="leaderName" placeholder="Your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Phone Number</label>
+                    <input type="tel" class="form-control" id="leaderPhone" placeholder="03XX-XXXXXXX" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Email Address</label>
+                    <input type="email" class="form-control" id="leaderEmail" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Region/Server</label>
+                    <select class="form-control" id="region" required>
+                        <option value="">Select your region</option>
+                        <option value="India">India</option>
+                        <option value="Asia">Pakistan</option>
+                        <option value="Europe">America</option>
+                        <option value="Middle East">Middle East</option>
+                        <option value="North America">Bangladash</option>
+                        <option value="South America">Sirilanka</option>
+                    </select>
+                </div>
+                
+                <div class="btn-group">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button type="button" class="btn" onclick="nextStep(1)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Team Members -->
+            <div class="form-step" id="step2">
+                <div class="alert alert-success">
+                    <strong>Team:</strong> <span id="displayTeamName"></span>
+                </div>
+                
+                <div class="team-members">
+                    <div class="member-card">
+                        <div class="member-title">Team Leader</div>
+                        <div class="form-group">
+                            <label class="required">Free Fire ID</label>
+                            <input type="text" class="form-control" id="leaderFFID" placeholder="1234567890" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Character Name</label>
+                            <input type="text" class="form-control" id="leaderCharacter" placeholder="Your in-game name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-title">Member 2</div>
+                        <div class="form-group">
+                            <label class="required">Full Name</label>
+                            <input type="text" class="form-control" id="member2Name" placeholder="Member's full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Free Fire ID</label>
+                            <input type="text" class="form-control" id="member2FFID" placeholder="1234567890" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Character Name</label>
+                            <input type="text" class="form-control" id="member2Character" placeholder="In-game name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-title">Member 3</div>
+                        <div class="form-group">
+                            <label class="required">Full Name</label>
+                            <input type="text" class="form-control" id="member3Name" placeholder="Member's full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Free Fire ID</label>
+                            <input type="text" class="form-control" id="member3FFID" placeholder="1234567890" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Character Name</label>
+                            <input type="text" class="form-control" id="member3Character" placeholder="In-game name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-title">Member 4 (Optional)</div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" class="form-control" id="member4Name" placeholder="Member's full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Free Fire ID</label>
+                            <input type="text" class="form-control" id="member4FFID" placeholder="1234567890">
+                        </div>
+                        <div class="form-group">
+                            <label>Character Name</label>
+                            <input type="text" class="form-control" id="member4Character" placeholder="In-game name">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(2)">Back</button>
+                    <button type="button" class="btn" onclick="nextStep(2)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Payment -->
+            <div class="form-step" id="step3">
+                <div class="summary-card">
+                    <div class="summary-title">Registration Summary</div>
+                    <div class="summary-item">
+                        <span>Team Name:</span>
+                        <span id="summaryTeamName"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Team Leader:</span>
+                        <span id="summaryLeader"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Members:</span>
+                        <span id="summaryMembers">3</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Registration Fee:</span>
+                        <span>Rs. 30</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Payment Method</label>
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <input type="radio" name="paymentMethod" id="jazzcash" value="jazzcash" checked>
+                            <label for="jazzcash">
+                                <img src="https://webdocoffice.com.pk/wp-content/uploads/2024/07/jazz-cash-logo-829841352F-seeklogo.com-removebg-preview.png" alt="JazzCash">
+                                <div class="name">JazzCash</div>
+                            </label>
+                        </div>
+                        <div class="payment-method">
+                            <input type="radio" name="paymentMethod" id="easypaisa" value="easypaisa">
+                            <label for="easypaisa">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Easypaisa_Digital_Bank_logo.png/1200px-Easypaisa_Digital_Bank_logo.png" alt="EasyPaisa">
+                                <div class="name">EasyPaisa</div>
+                            </label>
+                        </div>
+                        <div class="payment-method">
+                            <input type="radio" name="paymentMethod" id="bank" value="bank">
+                            <label for="bank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2830/2830280.png" alt="Bank Transfer">
+                                <div class="name">Bank Transfer</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="jazzcash-payment active" id="jazzcashPayment">
+                    <div class="jazzcash-logo">
+                        <img src="https://webdocoffice.com.pk/wp-content/uploads/2024/07/jazz-cash-logo-829841352F-seeklogo.com-removebg-preview.png" alt="JazzCash">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">JazzCash Mobile Number</label>
+                        <input type="tel" class="form-control" id="jazzcashNumber" placeholder="03XX-XXXXXXX" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Transaction PIN</label>
+                        <input type="password" class="form-control" id="jazzcashPin" placeholder="4-digit PIN" maxlength="4" required>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        You will receive a confirmation message on your JazzCash number after successful payment.
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(3)">Back</button>
+                    <button type="button" class="btn" onclick="processPayment()">Pay Rs. 30</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Complete -->
+            <div class="form-step" id="step4">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="var(--success)"/>
+                        <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h2 style="margin-top: 15px; color: var(--success);">Registration Successful!</h2>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-title">Your Registration Details</div>
+                    <div class="summary-item">
+                        <span>Team Name:</span>
+                        <span id="completeTeamName"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Registration ID:</span>
+                        <span id="registrationId">FFC-<span id="currentYear"></span>-<span id="randomId">58362</span></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Payment Status:</span>
+                        <span style="color: var(--success);">Paid (Rs. 30)</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Payment Method:</span>
+                        <span>JazzCash</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Transaction ID:</span>
+                        <span>JC<span id="transactionId">2023101558362</span></span>
+                    </div>
+                </div>
+                
+                <div class="alert alert-success" style="margin-top: 20px;">
+                    <strong>Next Steps:</strong> We've sent tournament details to your email and phone number. 
+                    Join our WhatsApp group for updates: <a href="https://chat.whatsapp.com/EeYt7X16mYHGKs3jdBhZKi" style="color: white; text-decoration: underline;">Click here to join</a>
+                </div>
+                
+                <button type="button" class="btn btn-block" onclick="window.print()" style="margin-top: 20px;">
+                    Print Registration
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current step tracking
+        let currentStep = 1;
+        
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Generate random IDs
+        document.getElementById('randomId').textContent = Math.floor(10000 + Math.random() * 90000);
+        document.getElementById('transactionId').textContent = new Date().getFullYear() + 
+            (new Date().getMonth() + 1).toString().padStart(2, '0') + 
+            new Date().getDate().toString().padStart(2, '0') + 
+            document.getElementById('randomId').textContent;
+        
+        // Payment method toggle
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.jazzcash-payment').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                if(this.value === 'jazzcash') {
+                    document.getElementById('jazzcashPayment').style.display = 'block';
+                }
+            });
+        });
+        
+        // Step navigation functions
+        function nextStep(current) {
+            if(validateStep(current)) {
+                document.getElementById(`step${current}`).classList.remove('active');
+                document.getElementById(`step${current + 1}`).classList.add('active');
+                document.getElementById(`step${current}-indicator`).classList.remove('active');
+                document.getElementById(`step${current}-indicator`).classList.add('completed');
+                document.getElementById(`step${current + 1}-indicator`).classList.add('active');
+                currentStep = current + 1;
+                
+                // Update summary information
+                if(current === 1) {
+                    document.getElementById('displayTeamName').textContent = document.getElementById('teamName').value;
+                } else if(current === 2) {
+                    document.getElementById('summaryTeamName').textContent = document.getElementById('teamName').value;
+                    document.getElementById('summaryLeader').textContent = document.getElementById('leaderName').value;
+                    document.getElementById('completeTeamName').textContent = document.getElementById('teamName').value;
+                    
+                    // Count team members
+                    let memberCount = 3;
+                    if(document.getElementById('member4Name').value.trim() !== '' && 
+                       document.getElementById('member4FFID').value.trim() !== '') {
+                        memberCount = 4;
+                    }
+                    document.getElementById('summaryMembers').textContent = memberCount;
+                }
+            }
+        }
+        
+        function prevStep(current) {
+            document.getElementById(`step${current}`).classList.remove('active');
+            document.getElementById(`step${current - 1}`).classList.add('active');
+            document.getElementById(`step${current}-indicator`).classList.remove('active');
+            document.getElementById(`step${current - 1}-indicator`).classList.add('active');
+            document.getElementById(`step${current - 1}-indicator`).classList.remove('completed');
+            currentStep = current - 1;
+        }
+        
+        function validateStep(step) {
+            let isValid = true;
+            
+            if(step === 1) {
+                const requiredFields = [
+                    'teamName', 'leaderName', 'leaderPhone', 'leaderEmail', 'region'
+                ];
+                
+                requiredFields.forEach(id => {
+                    const field = document.getElementById(id);
+                    if(!field.value.trim()) {
+                        field.style.borderColor = 'var(--danger)';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                // Validate email format
+                const email = document.getElementById('leaderEmail').value;
+                if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    document.getElementById('leaderEmail').style.borderColor = 'var(--danger)';
+                    isValid = false;
+                }
+                
+                // Validate phone format
+                const phone = document.getElementById('leaderPhone').value;
+                if(phone && !/^03\d{9}$/.test(phone)) {
+                    document.getElementById('leaderPhone').style.borderColor = 'var(--danger)';
+                    isValid = false;
+                }
+            } else if(step === 2) {
+                const requiredFields = [
+                    'leaderFFID', 'leaderCharacter', 
+                    'member2Name', 'member2FFID', 'member2Character',
+                    'member3Name', 'member3FFID', 'member3Character'
+                ];
+                
+                requiredFields.forEach(id => {
+                    const field = document.getElementById(id);
+                    if(!field.value.trim()) {
+                        field.style.borderColor = 'var(--danger)';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                // Validate FF IDs are numbers
+                const ffIdFields = ['leaderFFID', 'member2FFID', 'member3FFID', 'member4FFID'];
+                ffIdFields.forEach(id => {
+                    const field = document.getElementById(id);
+                    if(field.value.trim() && !/^\d+$/.test(field.value.trim())) {
+                        field.style.borderColor = 'var(--danger)';
+                        isValid = false;
+                    }
+                });
+            }
+            
+            if(!isValid) {
+                alert('Please fill all required fields correctly before proceeding.');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function processPayment() {
+            // Validate payment details
+            const jazzcashNumber = document.getElementById('jazzcashNumber').value;
+            const jazzcashPin = document.getElementById('jazzcashPin').value;
+            
+            if(!jazzcashNumber || !/^03\d{9}$/.test(jazzcashNumber)) {
+                document.getElementById('jazzcashNumber').style.borderColor = 'var(--danger)';
+                alert('Please enter a valid JazzCash mobile number (03XXXXXXXXX)');
+                return;
+            }
+            
+            if(!jazzcashPin || !/^\d{4}$/.test(jazzcashPin)) {
+                document.getElementById('jazzcashPin').style.borderColor = 'var(--danger)';
+                alert('Please enter a valid 4-digit JazzCash PIN');
+                return;
+            }
+            
+            // Simulate payment processing
+            document.getElementById('jazzcashNumber').style.borderColor = '';
+            document.getElementById('jazzcashPin').style.borderColor = '';
+            
+            // Show loading state
+            const payBtn = document.querySelector('#step3 .btn-group button:last-child');
+            payBtn.disabled = true;
+            payBtn.innerHTML = '<div class="spinner"></div> Processing...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // On successful payment
+                nextStep(3);
+                
+                // Save all data to Google Sheets
+                saveRegistrationData();
+            }, 2000);
+        }
+        
+        function saveRegistrationData() {
+            // Prepare all form data in the exact format for Google Sheets
+            const formData = {
+                timestamp: new Date().toISOString(),
+                teamName: document.getElementById('teamName').value,
+                teamLeader: document.getElementById('leaderName').value,
+                leaderPhone: document.getElementById('leaderPhone').value,
+                leaderEmail: document.getElementById('leaderEmail').value,
+                leaderFFID: document.getElementById('leaderFFID').value,
+                leaderCharacter: document.getElementById('leaderCharacter').value,
+                region: document.getElementById('region').value,
+                member1Name: document.getElementById('member2Name').value,
+                member1FFID: document.getElementById('member2FFID').value,
+                member1Character: document.getElementById('member2Character').value,
+                member2Name: document.getElementById('member3Name').value,
+                member2FFID: document.getElementById('member3FFID').value,
+                member2Character: document.getElementById('member3Character').value,
+                member3Name: document.getElementById('member4Name').value || '',
+                member3FFID: document.getElementById('member4FFID').value || '',
+                member3Character: document.getElementById('member4Character').value || '',
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+                paymentNumber: document.getElementById('jazzcashNumber').value,
+                amount: '30',
+                registrationId: 'FFC-' + document.getElementById('currentYear').textContent + '-' + document.getElementById('randomId').textContent,
+                transactionId: 'JC' + document.getElementById('transactionId').textContent,
+                status: 'Pending'
+            };
+            
+            // Send data to Google Sheets (replace with your actual Web App URL)
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbx873cJJAE_42YahpYYCjloguBqr6EtiB9DjfOondX9SKxRTl6x2FSZyXqK2fu5fxbusg/exec';
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                console.log('Success:', response);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // In case of error, you might want to show an error message
+                // or allow the user to retry submission
+            });
+        }
+    </script>
+</body>
+</html>
